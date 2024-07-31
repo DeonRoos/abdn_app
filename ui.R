@@ -112,11 +112,11 @@ shinyUI(navbarPage(
                numericInput("lat", "Latitude:", value = 57.16686874046701),
                numericInput("sqmt", "Square Meters:", value = 100),
                numericInput("rooms", "Number of Rooms:", value = 3),
-               selectInput("type", "House Type:", choices = c("detached", "semi-detached", "terrace", "flat"), selected = "detached"),
+               selectInput("type", "House Type:", choices = c("detached", "semi", "terrace"), selected = "detached"),
                numericInput("baths", "Number of Bathrooms:", value = 1),
                selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
-               numericInput("days_since", "Days Since Added:", value = 0),
+               numericInput("days_since", "Days Since 1st of July 2024:", value = 0),
                actionButton("predict", "Predict Price")
              ),
              mainPanel(
