@@ -112,10 +112,10 @@ shinyUI(navbarPage(
                numericInput("lat", "Latitude:", value = 57.16686874046701),
                numericInput("sqmt", "Square Meters:", value = 100),
                numericInput("rooms", "Number of Rooms:", value = 3),
-               selectInput("type", "House Type:", choices = c("detached", "semi-detached", "terrace", "flat")),
+               selectInput("type", "House Type:", choices = c("detached", "semi-detached", "terrace", "flat"), selected = "detached"),
                numericInput("baths", "Number of Bathrooms:", value = 1),
-               selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g")),
-               selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g")),
+               selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
+               selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                numericInput("days_since", "Days Since Added:", value = 0),
                actionButton("predict", "Predict Price")
              ),
@@ -123,7 +123,7 @@ shinyUI(navbarPage(
                h4("Prediction Results"),
                textOutput("prediction"),
                br(),
-               p("The expected price represents the price the amount predicts the house would be listed for, not sold for, and assumes the house is in 'average' condition, i.e. the house is of sufficient quality to allow the buyer to move in immediately with only minor updates or refurbishments required some time down the line.")
+               p("The expected price represents the price the model predicts the house would be listed for, not sold for, and assumes the house is in 'average' condition, i.e. the house is of sufficient quality to allow the buyer to move in immediately with only minor updates or refurbishments required some time down the line.")
              )
            )
   ),
