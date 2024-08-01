@@ -1,4 +1,5 @@
 library(shiny)
+library(leaflet)
 
 shinyUI(navbarPage(
   title = "Aberdeen House Prices",
@@ -20,7 +21,7 @@ shinyUI(navbarPage(
       /* Sidebar panel styles */
       .well {
         background-color: #202123 !important;
-        border: none !important;
+        border: 1px solid #00A68A !important;
       }
 
       /* Text color styles */
@@ -108,12 +109,13 @@ shinyUI(navbarPage(
            sidebarLayout(
              sidebarPanel(
                h3("Enter House Details"),
-               numericInput("lon", "Longitude:", value = -2.105621720258337),
-               numericInput("lat", "Latitude:", value = 57.16686874046701),
-               numericInput("sqmt", "Square Meters:", value = 100),
-               numericInput("rooms", "Number of Rooms:", value = 3),
+               h5("Select House Location"),
+               leafletOutput("map", height = "300px"),
+               br(),
                selectInput("type", "House Type:", choices = c("detached", "semi", "terrace"), selected = "detached"),
+               numericInput("rooms", "Number of Rooms:", value = 3),
                numericInput("baths", "Number of Bathrooms:", value = 1),
+               numericInput("sqmt", "Square Meters:", value = 100),
                selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                numericInput("days_since", "Days Since 1st of July 2024:", value = 0),
@@ -121,20 +123,22 @@ shinyUI(navbarPage(
              ),
              mainPanel(
                h4("Prediction Results"),
-               textOutput("prediction"),
+               htmlOutput("prediction"),
                br(),
-               p("The expected price represents the price the model predicts the house would be listed for, not sold for, and assumes the house is in 'average' condition, i.e. the house is of sufficient quality to allow the buyer to move in immediately with only minor updates or refurbishments required some time down the line.")
+               p("The expected price represents the price the model predicts the house would be listed for, not sold for, and assumes the house is in 'average' condition, i.e. the house is of sufficient quality to allow the buyer to move in immediately with only minor updates or refurbishments required some time down the line."),
+               br(),
+               uiOutput("prediction_details")
              )
            )
   ),
-  tabPanel("Map Plot",
-           h3("Map Plot"),
+  tabPanel("Predictions across Aberdeenshire",
+           h3("The maps below show the predicted house price for the average Aberdeenshire house. The average house has five rooms (three of which are bedrooms), one bathroom, 102 square meters, EPC of C and tax grade of C"),
            div(class = "image-container",
                img(src = "plot_maps.png")
            )
   ),
-  tabPanel("Figures Plot",
-           h3("Figures Plot"),
+  tabPanel("Predicted relationships for house characterists",
+           h3("The figures below assume average values for all characteristics not included in the focal plot (i.e. the house is average in all ways other than those varied in the figure)."),
            div(class = "image-container",
                img(src = "plot_figs.png")
            )
