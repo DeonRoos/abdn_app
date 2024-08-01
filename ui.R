@@ -118,7 +118,6 @@ shinyUI(navbarPage(
                numericInput("sqmt", "Square Meters:", value = 100),
                selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
-               numericInput("days_since", "Days Since 1st of July 2024:", value = 0),
                actionButton("predict", "Predict Price")
              ),
              mainPanel(
