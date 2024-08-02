@@ -5,7 +5,7 @@ account: deonroos
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12374652
-bundleId: 8936126
+bundleId: 8939818
 url: https://deonroos.shinyapps.io/Aberdeen_House_Prices/
 version: 1
 asMultiple: FALSE
