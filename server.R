@@ -19,25 +19,25 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  output$leaflet_map_viewing <- renderUI({
-    tags$iframe(
-      src = "abdn_viewing.html",
-      width = "100%",
-      height = "850px",
-      frameborder = "0",
-      scrolling = "yes"
-    )
-  })
+  # output$leaflet_map_viewing <- renderUI({
+  #   tags$iframe(
+  #     src = "abdn_viewing.html",
+  #     width = "100%",
+  #     height = "850px",
+  #     frameborder = "0",
+  #     scrolling = "yes"
+  #   )
+  # })
   
-  output$leaflet_map_viewing_today <- renderUI({
-    tags$iframe(
-      src = "abdn_viewing_today.html",
-      width = "100%",
-      height = "850px",
-      frameborder = "0",
-      scrolling = "yes"
-    )
-  })
+  # output$leaflet_map_viewing_today <- renderUI({
+  #   tags$iframe(
+  #     src = "abdn_viewing_today.html",
+  #     width = "100%",
+  #     height = "850px",
+  #     frameborder = "0",
+  #     scrolling = "yes"
+  #   )
+  # })
   
   # Reactive values for storing coordinates
   coords <- reactiveValues(lon = -2.105621720258337, lat = 57.16686874046701)
