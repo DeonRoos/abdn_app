@@ -60,6 +60,11 @@ shinyServer(function(input, output, session) {
   })
   
   observeEvent(input$predict, {
+    # Calculate days since the reference date
+    reference_date <- as.Date("2024-07-06")
+    selected_date <- input$date_selected
+    days_since <- as.numeric(difftime(selected_date, reference_date, units = "days"))
+    
     new_data <- data.frame(
       lon = coords$lon,
       lat = coords$lat,
@@ -69,7 +74,7 @@ shinyServer(function(input, output, session) {
       baths = input$baths,
       epc = input$epc,
       tax = input$tax,
-      days_since = 0
+      days_since = days_since
     )
     
     prediction <- predict(model_m1, new_data, se.fit = TRUE)
@@ -86,6 +91,7 @@ shinyServer(function(input, output, session) {
         "</div>"
       )
     })
+    
     output$prediction_details <- renderUI({
       HTML(paste0(
         "<h4>Details Used for Prediction</h4>",
@@ -98,6 +104,7 @@ shinyServer(function(input, output, session) {
         "<li>Tax Band: ", input$tax, "</li>",
         "<li>Longitude: ", coords$lon, "</li>",
         "<li>Latitude: ", coords$lat, "</li>",
+        "<li>On (Date): ", selected_date, "</li>",
         "</ul>"
       ))
     })

@@ -89,6 +89,42 @@ shinyUI(navbarPage(
         max-width: 100%;
         height: auto;
       }
+      
+          /* Custom Date Picker styles */
+    .datepicker {
+      background-color: #444654 !important;
+      border: 1px solid #00A68A !important;
+      color: white !important;
+    }
+    .datepicker table {
+      background-color: #444654 !important;
+      color: white !important;
+    }
+    .datepicker table tr td, .datepicker table tr th {
+      background-color: #444654 !important;
+      color: white !important;
+    }
+    .datepicker table tr td.day:hover, .datepicker table tr td.day.focused {
+      background-color: #00A68A !important;
+      color: #FFFFFF !important;
+    }
+    .datepicker table tr td.active, .datepicker table tr td.active:hover {
+      background-color: #00A68A !important;
+      color: #FFFFFF !important;
+    }
+    .datepicker table tr td.today {
+      background-color: #00A68A !important;
+      color: #FFFFFF !important;
+      border-radius: 50%;
+    }
+    .datepicker table tr td.today:hover {
+      background-color: #00A68A !important;
+      color: #FFFFFF !important;
+    }
+    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+      background-color: #444654 !important;
+      color: #777 !important;
+    }
       ")
     )
   ),
@@ -105,6 +141,13 @@ shinyUI(navbarPage(
                numericInput("sqmt", "Square Meters:", value = 103),
                selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
                selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "e"),
+               dateInput(
+                 inputId = "date_selected",
+                 label = "Select Date:",
+                 value = Sys.Date(),  # Default value is the current date
+                 min = "2024-07-06",  # Minimum date allowed
+                 max = Sys.Date()     # Maximum date allowed (current date)
+               ),
                actionButton("predict", "Predict Price")
              ),
              mainPanel(
