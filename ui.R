@@ -3,7 +3,6 @@ library(leaflet)
 
 shinyUI(navbarPage(
   title = "Aberdeen House Prices",
-  # Add custom styles to the head section of the HTML document
   tags$head(
     tags$style(
       HTML("
@@ -136,6 +135,11 @@ shinyUI(navbarPage(
                leafletOutput("map", height = "300px"),
                br(),
                selectInput("type", "House Type:", choices = c("detached", "semi", "terrace"), selected = "detached"),
+               selectInput("UR8", "Urban desingation:", choices = c(
+                 "Large Urban Areas", "Accessible Rural Areas", "Other Urban Areas",      
+                 "Accessible Small Towns", "Remote Small Towns", "Remote Rural Areas", 
+                 "Very Remote Rural Areas"
+               ), selected = "Large Urban Areas"),
                numericInput("rooms", "Number of Rooms:", value = 5),
                numericInput("baths", "Number of Bathrooms:", value = 1),
                numericInput("sqmt", "Square Meters:", value = 103),
@@ -163,14 +167,6 @@ shinyUI(navbarPage(
   tabPanel("Houses",
            uiOutput("leaflet_map_price")
   ),
-  # tabPanel("Viewing Map",
-  #          h3("Viewing Map"),
-  #          uiOutput("leaflet_map_viewing")
-  # ),
-  # tabPanel("Today's Viewing Map",
-  #          h3("Today's Viewing Map"),
-  #          uiOutput("leaflet_map_viewing_today")
-  # ),
   tabPanel("Aberdeenshire",
            h5("The maps below show the predicted house price for the average Aberdeenshire house. The average house is detached, has five rooms (three of which are bedrooms, two living rooms), one bathroom, 103 square meters, has EPC of C and tax grade of E"),
            div(class = "image-container",
@@ -185,11 +181,4 @@ shinyUI(navbarPage(
              img(src = "plot_maps.png")
            )
   )
-  # ,
-  # tabPanel("Predicted relationships for house characterists",
-  #          h3("The figures below assume average values for all characteristics not included in the focal plot (i.e. the house is average in all ways other than those varied in the figure)."),
-  #          div(class = "image-container",
-  #              img(src = "plot_figs.png")
-  #          )
-  # )
 ))
