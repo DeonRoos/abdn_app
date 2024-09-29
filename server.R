@@ -66,16 +66,20 @@ shinyServer(function(input, output, session) {
     days_since <- as.numeric(difftime(selected_date, reference_date, units = "days"))
     
     new_data <- data.frame(
-      lon = coords$lon,
-      lat = coords$lat,
-      sqmt = input$sqmt,
+      Longitude = coords$lon,
+      Latitude = coords$lat,
+      FloorArea = input$sqmt,
       rooms = input$rooms,
-      type = input$type,
+      Bathrooms = input$baths,
+      HouseType = input$type,
       UR8Name = input$UR8,
       baths = input$baths,
-      epc = input$epc,
-      tax = input$tax,
-      days_since = days_since
+      epc_band = input$epc,
+      council_tax_band = input$tax,
+      days_since = days_since,
+      parking_type = input$parking_type,
+      num_floors = as.numeric(input$num_floors),
+      has_garden = "Yes"
     )
     
     prediction <- predict(model_m1, new_data, se.fit = TRUE)
@@ -99,11 +103,13 @@ shinyServer(function(input, output, session) {
         "<ul>",
         "<li>House Type: ", input$type, "</li>",
         "<li>Urban|Rural: ", input$UR8, "</li>",
+        "<li>Number of Floors: ", input$num_floors, "</li>",
         "<li>Number of Rooms: ", input$rooms, "</li>",
         "<li>Number of Bathrooms: ", input$baths, "</li>",
         "<li>Square Meters: ", input$sqmt, "</li>",
         "<li>EPC Rating: ", input$epc, "</li>",
         "<li>Tax Band: ", input$tax, "</li>",
+        "<li>Parking: ", input$parking_type, "</li>",
         "<li>Longitude: ", coords$lon, "</li>",
         "<li>Latitude: ", coords$lat, "</li>",
         "<li>On (Date): ", selected_date, "</li>",

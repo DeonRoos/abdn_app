@@ -134,17 +134,19 @@ shinyUI(navbarPage(
                h5("Select House Location"),
                leafletOutput("map", height = "300px"),
                br(),
-               selectInput("type", "House Type:", choices = c("detached", "semi", "terrace"), selected = "detached"),
+               selectInput("type", "House Type:", choices = c("Detached", "Semi-Detached", "Terraced", "Flat"), selected = "detached"),
                selectInput("UR8", "Urban desingation:", choices = c(
                  "Large Urban Areas", "Accessible Rural Areas", "Other Urban Areas",      
                  "Accessible Small Towns", "Remote Small Towns", "Remote Rural Areas", 
                  "Very Remote Rural Areas"
                ), selected = "Large Urban Areas"),
+               selectInput("num_floors", "Numerb of Floors:", choices = c("1","2"), selected = "2"),
                numericInput("rooms", "Number of Rooms:", value = 5),
                numericInput("baths", "Number of Bathrooms:", value = 1),
                numericInput("sqmt", "Square Meters:", value = 103),
-               selectInput("epc", "EPC Rating:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "c"),
-               selectInput("tax", "Tax Band:", choices = c("a", "b", "c", "d", "e", "f", "g"), selected = "e"),
+               selectInput("parking_type", "Parking:", choices = c("Garage", "Parking", "Double Garage", "No parking"), selected = "Garage"),
+               selectInput("epc", "EPC Rating:", choices = c("A", "B", "C", "D", "E", "F", "G"), selected = "C"),
+               selectInput("tax", "Tax Band:", choices = c("A", "B", "C", "D", "E", "F", "G"), selected = "D"),
                dateInput(
                  inputId = "date_selected",
                  label = "Select Date:",
