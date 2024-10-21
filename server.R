@@ -18,27 +18,7 @@ shinyServer(function(input, output, session) {
       scrolling = "yes"
     )
   })
-  
-  # output$leaflet_map_viewing <- renderUI({
-  #   tags$iframe(
-  #     src = "abdn_viewing.html",
-  #     width = "100%",
-  #     height = "850px",
-  #     frameborder = "0",
-  #     scrolling = "yes"
-  #   )
-  # })
-  
-  # output$leaflet_map_viewing_today <- renderUI({
-  #   tags$iframe(
-  #     src = "abdn_viewing_today.html",
-  #     width = "100%",
-  #     height = "850px",
-  #     frameborder = "0",
-  #     scrolling = "yes"
-  #   )
-  # })
-  
+
   # Reactive values for storing coordinates
   coords <- reactiveValues(lon = -2.105621720258337, lat = 57.16686874046701)
   
@@ -61,7 +41,7 @@ shinyServer(function(input, output, session) {
   
   observeEvent(input$predict, {
     # Calculate days since the reference date
-    reference_date <- as.Date("2024-07-06")
+    reference_date <- as.Date("2024-09-27")
     selected_date <- input$date_selected
     days_since <- as.numeric(difftime(selected_date, reference_date, units = "days"))
     
@@ -74,11 +54,11 @@ shinyServer(function(input, output, session) {
       HouseType = input$type,
       UR8Name = input$UR8,
       baths = input$baths,
-      epc_band = input$epc,
-      council_tax_band = input$tax,
+      epc_band = as.factor(input$epc),
+      council_tax_band = as.factor(input$tax),
       days_since = days_since,
       parking_type = input$parking_type,
-      num_floors = as.numeric(input$num_floors),
+      num_floors = as.factor(input$num_floors),
       has_garden = "Yes"
     )
     
