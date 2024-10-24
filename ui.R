@@ -151,7 +151,7 @@ shinyUI(navbarPage(
                  inputId = "date_selected",
                  label = "Select Date:",
                  value = Sys.Date(),  # Default value is the current date
-                 min = "2024-07-06",  # Minimum date allowed
+                 min = "2024-09-27",  # Minimum date allowed
                  max = Sys.Date()     # Maximum date allowed (current date)
                ),
                actionButton("predict", "Predict Price")
