@@ -1,5 +1,6 @@
 library(shiny)
 library(leaflet)
+library(shinyjs)
 
 shinyUI(navbarPage(
   title = "Aberdeen House Prices",
@@ -44,7 +45,7 @@ shinyUI(navbarPage(
         font-size: 20px;
       }
 
-      /* Navigation bar styles */
+      /* Navbar hover and active styles */
       .navbar .nav > li > a:hover,
       .navbar .nav > li > a:focus {
         background-color: #00A68A;
@@ -52,8 +53,6 @@ shinyUI(navbarPage(
         border: 2px solid #00A68A;
         box-shadow: 0 0 10px 5px rgba(0, 166, 138, 0.3);
       }
-
-      /* Navigation bar styles */
       .navbar .nav .active > a,
       .navbar .nav .active > a:hover,
       .navbar .nav .active > a:focus {
@@ -88,79 +87,85 @@ shinyUI(navbarPage(
         max-width: 100%;
         height: auto;
       }
-      
-          /* Custom Date Picker styles */
-    .datepicker {
-      background-color: #444654 !important;
-      border: 1px solid #00A68A !important;
-      color: white !important;
-    }
-    .datepicker table {
-      background-color: #444654 !important;
-      color: white !important;
-    }
-    .datepicker table tr td, .datepicker table tr th {
-      background-color: #444654 !important;
-      color: white !important;
-    }
-    .datepicker table tr td.day:hover, .datepicker table tr td.day.focused {
-      background-color: #00A68A !important;
-      color: #FFFFFF !important;
-    }
-    .datepicker table tr td.active, .datepicker table tr td.active:hover {
-      background-color: #00A68A !important;
-      color: #FFFFFF !important;
-    }
-    .datepicker table tr td.today {
-      background-color: #00A68A !important;
-      color: #FFFFFF !important;
-      border-radius: 50%;
-    }
-    .datepicker table tr td.today:hover {
-      background-color: #00A68A !important;
-      color: #FFFFFF !important;
-    }
-    .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
-      background-color: #444654 !important;
-      color: #777 !important;
-    }
+
+      /* Custom Date Picker styles */
+      .datepicker {
+        background-color: #444654 !important;
+        border: 1px solid #00A68A !important;
+        color: white !important;
+      }
+      .datepicker table {
+        background-color: #444654 !important;
+        color: white !important;
+      }
+      .datepicker table tr td, .datepicker table tr th {
+        background-color: #444654 !important;
+        color: white !important;
+      }
+      .datepicker table tr td.day:hover, .datepicker table tr td.day.focused {
+        background-color: #00A68A !important;
+        color: #FFFFFF !important;
+      }
+      .datepicker table tr td.active, .datepicker table tr td.active:hover {
+        background-color: #00A68A !important;
+        color: #FFFFFF !important;
+      }
+      .datepicker table tr td.today {
+        background-color: #00A68A !important;
+        color: #FFFFFF !important;
+        border-radius: 50%;
+      }
+      .datepicker table tr td.today:hover {
+        background-color: #00A68A !important;
+        color: #FFFFFF !important;
+      }
+      .datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
+        background-color: #444654 !important;
+        color: #777 !important;
+      }
+
+      /* Modal styles */
+      .modal-content {
+        background-color: #202123 !important;
+        color: white !important;
+        border: 1px solid #00A68A !important;
+      }
+      .modal-header, .modal-footer {
+        background-color: #444654 !important;
+        color: white !important;
+        border-top: 1px solid #00A68A;
+      }
+      .modal-title {
+        color: #00A68A !important;
+        font-weight: bold;
+      }
+      .modal-body {
+        color: white !important;
+      }
+      .modal-footer .btn {
+        background-color: #00A68A;
+        color: #FFFFFF !important;
+        border: 1px solid #00A68A;
+      }
       ")
     )
   ),
+  useShinyjs(),  # Enable shinyjs
   tabPanel("Price Prediction",
            sidebarLayout(
              sidebarPanel(
                h3("Enter House Details"),
                h5("Select House Location"),
-               leafletOutput("map", height = "300px"),
+               leafletOutput("map", height = "600px"),
                br(),
-               selectInput("type", "House Type:", choices = c("Detached", "Semi-Detached", "Terraced", "Flat"), selected = "detached"),
-               selectInput("UR8", "Urban desingation:", choices = c(
-                 "Large Urban Areas", "Accessible Rural Areas", "Other Urban Areas",      
-                 "Accessible Small Towns", "Remote Small Towns", "Remote Rural Areas", 
-                 "Very Remote Rural Areas"
-               ), selected = "Large Urban Areas"),
-               selectInput("num_floors", "Numerb of Floors:", choices = c("1","2"), selected = "2"),
-               numericInput("rooms", "Number of Rooms:", value = 5),
-               numericInput("baths", "Number of Bathrooms:", value = 1),
-               numericInput("sqmt", "Square Meters:", value = 103),
-               selectInput("parking_type", "Parking:", choices = c("Garage", "Parking", "Double Garage", "No parking"), selected = "Garage"),
-               selectInput("epc", "EPC Rating:", choices = c("A", "B", "C", "D", "E", "F", "G"), selected = "C"),
-               selectInput("tax", "Tax Band:", choices = c("A", "B", "C", "D", "E", "F", "G"), selected = "D"),
-               dateInput(
-                 inputId = "date_selected",
-                 label = "Select Date:",
-                 value = Sys.Date(),  # Default value is the current date
-                 min = "2024-09-27",  # Minimum date allowed
-                 max = Sys.Date()     # Maximum date allowed (current date)
-               ),
-               actionButton("predict", "Predict Price")
+               actionButton("show_modal", "Enter House Details"),
+               actionButton("predict", "Predict Price", class = "btn", disabled = TRUE)  # Start disabled
              ),
              mainPanel(
                h4("Prediction Results"),
                htmlOutput("prediction"),
                br(),
-               p("The expected price represents the price the model predicts the house would be listed for, not sold for, and assumes the house is in 'average' condition, i.e. the house is of sufficient quality to allow the buyer to move in immediately with only minor updates or refurbishments required some time down the line."),
+               p("The expected price represents the price the model predicts the house would be listed for."),
                br(),
                uiOutput("prediction_details")
              )
@@ -182,5 +187,37 @@ shinyUI(navbarPage(
              ")),
              img(src = "plot_maps.png")
            )
+  ),
+  
+  # Modal for entering house details
+  tags$div(
+    id = "houseDetailsModal",
+    class = "modal fade",
+    tabindex = "-1",
+    role = "dialog",
+    tags$div(
+      class = "modal-dialog",
+      role = "document",
+      tags$div(
+        class = "modal-content",
+        tags$div(
+          class = "modal-header",
+          tags$button(type = "button", class = "close", `data-dismiss` = "modal", "×"),
+          tags$h4(class = "modal-title", "Enter House Details")
+        ),
+        tags$div(
+          class = "modal-body",
+          p("Please provide details about the house. These inputs allow the model to make an accurate prediction based on the house's features and location."),
+          selectInput("houseType", "House Type", choices = c("Detached", "Semi-Detached", "Terraced")),
+          numericInput("floorArea", "Floor Area (sq m)", value = 100),
+          # Add other relevant inputs here
+        ),
+        tags$div(
+          class = "modal-footer",
+          actionButton("modalSave", "Save", class = "btn btn-primary"),
+          tags$button(type = "button", class = "btn btn-default", `data-dismiss` = "modal", "Close")
+        )
+      )
+    )
   )
 ))
