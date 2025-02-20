@@ -4,11 +4,13 @@ library(dplyr)
 library(leaflet)
 library(sf)
 library(shinyjs)
+library(shinyBS)
 
 shinyServer(function(input, output, session) {
   
   # Enable shinyjs
   useShinyjs()
+  sf_use_s2(FALSE)
   
   # Reactive values to store map coordinates and form data
   coords <- reactiveValues(lon = -2.105621720258337, lat = 57.16686874046701, UR8Name = NULL)
@@ -30,9 +32,8 @@ shinyServer(function(input, output, session) {
   # Load the pre-trained model
   model_m1 <- readRDS(file.path("data", "model_m1.rds"))
   
-  # Load and preprocess shapefile for UR8Name detection
-  urban_rural_shp <- st_read(file.path("data", "SG_UrbanRural_2020", "SG_UrbanRural_2020.shp")) %>%
-    st_transform(crs = 4326)
+  # Load preprocessed shapefile (already simplified and transformed)
+  urban_rural_shp <- readRDS(file.path("data", "SG_UrbanRural_shp_simpl.rds"))
   
   # Solicitor choices
   solicitor_choices <- c(
@@ -81,8 +82,14 @@ shinyServer(function(input, output, session) {
     coords$lat <- click$lat
     
     # Find UR8Name based on coordinates
-    point_sf <- st_as_sf(data.frame(lon = coords$lon, lat = coords$lat), coords = c("lon", "lat"), crs = 4326)
-    coords$UR8Name <- st_join(point_sf, urban_rural_shp, left = TRUE)$UR8Name
+    tryCatch({
+      point_sf <- st_as_sf(data.frame(lon = coords$lon, lat = coords$lat), coords = c("lon", "lat"), crs = 4326)
+      matched <- st_join(point_sf, urban_rural_shp, left = TRUE)
+      coords$UR8Name <- matched$UR8Name[1]  # Safely access the first matched result
+    }, error = function(e) {
+      coords$UR8Name <- NULL
+      warning("Error in spatial join: ", e$message)
+    })
     
     leafletProxy("map") %>%
       clearMarkers() %>%
@@ -134,7 +141,29 @@ shinyServer(function(input, output, session) {
       selectInput("has_garden", "Has Garden:", choices = c("Yes", "No"), selected = form_data$has_garden),
       selectInput("num_floors", "Number of floors:", choices = c("1", "2"), selected = form_data$num_floors),
       selectInput("solicitor", "Solicitor Account Name:", choices = solicitor_choices, selected = form_data$solicitor),
-      dateInput("date_selected", "Select Date:", value = form_data$date_selected, min = "2024-09-27", max = Sys.Date())
+      dateInput("date_selected", "Select Date:", value = form_data$date_selected, min = "2024-09-27", max = Sys.Date()),
+      bsTooltip("type", "The type of property", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("sqmt", "The floor area of the property (not land)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("bedrooms", "The number of listed bedrooms", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("publicrooms", "The number of listed public rooms (e.g. living and dining rooms)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("baths", "The number of listed bathrooms and water closets", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("parking_type", "Type of parking available (No parking includes on street parking)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("epc", "Energy Performance Certificate rating: A (best) - G (worst)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("tax", "Tax band: A (lowest) - G (highest)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("has_garden", "Whether property has a garden or not", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("num_floors", "Number of floors (2 includes more than 2)", 
+                placement = "right", trigger = "hover"),
+      bsTooltip("date_selected", "The date the property was listed", 
+                placement = "right", trigger = "hover")
     )
   }
   
@@ -208,10 +237,10 @@ shinyServer(function(input, output, session) {
       "<li>Parking: ", form_data$parking_type, "</li>",
       "<li>Has Garden: ", form_data$has_garden, "</li>",
       "<li>Number of Floors: ", form_data$num_floors, "</li>",
-      "<li>Solicitor: ", form_data$solicitor, "</li>",
+      # "<li>Solicitor: ", form_data$solicitor, "</li>",
       "<li>Date Selected: ", form_data$date_selected, "</li>",
-      "<li>Longitude: ", coords$lon, "</li>",
-      "<li>Latitude: ", coords$lat, "</li>",
+      "<li>Longitude: ", round(coords$lon, digits = 3), "</li>",
+      "<li>Latitude: ", round(coords$lat, digits = 3), "</li>",
       "</ul>"
     ))
   }

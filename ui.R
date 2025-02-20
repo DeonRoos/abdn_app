@@ -3,7 +3,7 @@ library(leaflet)
 library(shinyjs)
 
 shinyUI(navbarPage(
-  title = "Aberdeen House Prices",
+  title = "Granite Price Guide",
   tags$head(
     tags$style(
       HTML("
@@ -84,8 +84,10 @@ shinyUI(navbarPage(
 
       /* Image styles */
       .image-container img {
-        max-width: 100%;
-        height: auto;
+        width: 100%; /* Use full width */
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       /* Custom Date Picker styles */
@@ -151,15 +153,21 @@ shinyUI(navbarPage(
     )
   ),
   useShinyjs(),  # Enable shinyjs
-  tabPanel("Price Prediction",
+  
+  navbarMenu(title = tagList(icon("chart-bar"), " Property Insights"),
+             tabPanel("Price Heatmaps", div(class = "image-container", img(src = "plot_maps.png", style = "max-width: 100%; max-height: 800px; height: auto; width: auto;"))),
+             tabPanel("Price Trends", div(class = "image-container", img(src = "trends.png", style = "max-width: 100%; max-height: 800px; height: auto; width: auto;")))
+  ),
+  
+  tabPanel(title = tagList(icon("chart-line"), " Price Prediction"),
            sidebarLayout(
              sidebarPanel(
                h3("Enter House Details"),
-               h5("Select House Location"),
+               h5(tagList(icon("map-marker-alt"), " Select House Location")),
                leafletOutput("map", height = "600px"),
                br(),
-               actionButton("show_modal", "Enter House Details"),
-               actionButton("predict", "Predict Price", class = "btn", disabled = TRUE)  # Start disabled
+               actionButton("show_modal", tagList(icon("edit"), " Enter House Details")),
+               actionButton("predict", tagList(icon("chart-line"), " Predict Price"), class = "btn", disabled = TRUE)
              ),
              mainPanel(
                h4("Prediction Results"),
@@ -171,53 +179,7 @@ shinyUI(navbarPage(
              )
            )
   ),
-  tabPanel("Houses",
+  tabPanel(title = tagList(icon("building"), " Houses"),
            uiOutput("leaflet_map_price")
-  ),
-  tabPanel("Aberdeenshire",
-           h5("The maps below show the predicted house price for the average Aberdeenshire house. The average house is detached, has five rooms (three of which are bedrooms, two living rooms), one bathroom, 103 square meters, has EPC of C and tax grade of E"),
-           div(class = "image-container",
-               tags$style(HTML("
-               .image-container {
-                 width: 100%; /* Use full width */
-                 display: flex;
-                 justify-content: center;
-                 align-items: center;
-               }
-             ")),
-             img(src = "plot_maps.png")
-           )
-  ),
-  
-  # Modal for entering house details
-  tags$div(
-    id = "houseDetailsModal",
-    class = "modal fade",
-    tabindex = "-1",
-    role = "dialog",
-    tags$div(
-      class = "modal-dialog",
-      role = "document",
-      tags$div(
-        class = "modal-content",
-        tags$div(
-          class = "modal-header",
-          tags$button(type = "button", class = "close", `data-dismiss` = "modal", "×"),
-          tags$h4(class = "modal-title", "Enter House Details")
-        ),
-        tags$div(
-          class = "modal-body",
-          p("Please provide details about the house. These inputs allow the model to make an accurate prediction based on the house's features and location."),
-          selectInput("houseType", "House Type", choices = c("Detached", "Semi-Detached", "Terraced")),
-          numericInput("floorArea", "Floor Area (sq m)", value = 100),
-          # Add other relevant inputs here
-        ),
-        tags$div(
-          class = "modal-footer",
-          actionButton("modalSave", "Save", class = "btn btn-primary"),
-          tags$button(type = "button", class = "btn btn-default", `data-dismiss` = "modal", "Close")
-        )
-      )
-    )
   )
 ))
