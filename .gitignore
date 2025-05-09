@@ -2,9 +2,5 @@
 .Rhistory
 .RData
 .Ruserdata
-<<<<<<< HEAD
 "data/model_m1.rds" 
-=======
-data/model_m1.rds
 www/abdn_homes_pricing_files/
->>>>>>> ae31fe2 (trying to resolve rds commit)
