@@ -155,8 +155,8 @@ shinyUI(navbarPage(
   useShinyjs(),  # Enable shinyjs
   
   navbarMenu(title = tagList(icon("chart-bar"), " Property Insights"),
-             tabPanel("Price Heatmaps", div(class = "image-container", img(src = "plot_maps.png", style = "max-width: 100%; max-height: 800px; height: auto; width: auto;"))),
-             tabPanel("Price Trends", div(class = "image-container", img(src = "trends.png", style = "max-width: 100%; max-height: 800px; height: auto; width: auto;")))
+             tabPanel("Price Heatmaps", div(class = "image-container", img(src = "plot_maps.png", style = "width: 100%; height: auto;"))),
+             tabPanel("Price Trends", div(class = "image-container", img(src = "trends.png", style = "width: 100%; height: auto;")))
   ),
   
   tabPanel(title = tagList(icon("chart-line"), " Price Prediction"),

@@ -25,7 +25,7 @@ shinyServer(function(input, output, session) {
     tax = "D",
     has_garden = "Yes",
     num_floors = "1",
-    solicitor = "James & George Collie",
+    #solicitor = "James & George Collie",
     date_selected = Sys.Date()
   )
   
@@ -36,22 +36,22 @@ shinyServer(function(input, output, session) {
   urban_rural_shp <- readRDS(file.path("data", "SG_UrbanRural_shp_simpl.rds"))
   
   # Solicitor choices
-  solicitor_choices <- c(
-    "James & George Collie", "Aberdein Considine", "Raeburn Christie Clark & Wallace",
-    "Solicitors Direct", "Andersonbain LLP", "Storie, Cruden & Simpson",
-    "Kellas", "Burnett & Reid LLP", "Ledingham Chalmers LLP",
-    "Mackinnons", "Alex Hutcheon + Co", "Wilsone & Duffus",
-    "A.C. Morrison & Richards LLP", "Stewart & Watson", "Peterkins",
-    "Laurie & Co", "Adam Flowerdew & Reynolds", "Masson & Glennie LLP",
-    "Shiells", "Smith Solicitors Stonehaven", "Balfour + Manson",
-    "T. Duncan & Co.", "Gavin Bain & Co.", "Stronachs LLP",
-    "Brown & McRae", "Church Of Scotland", "Thorntons",
-    "Grant Smith Law Practice", "Murdoch, Mcmath & Mitchell", "Walter Gerrard & Co",
-    "Gilson Gray LLP", "Howie & Co", "Burnett Legal Services Ltd.",
-    "Macrae Stephen & Co", "Blackadders", "Hamilton Watt & Co",
-    "Taggart, Meil, Mathers", "Beckley Kenny & Co", "John Davie & Co",
-    "Alex Hutcheon & Company Ltd"
-  )
+  # solicitor_choices <- c(
+  #   "James & George Collie", "Aberdein Considine", "Raeburn Christie Clark & Wallace",
+  #   "Solicitors Direct", "Andersonbain LLP", "Storie, Cruden & Simpson",
+  #   "Kellas", "Burnett & Reid LLP", "Ledingham Chalmers LLP",
+  #   "Mackinnons", "Alex Hutcheon + Co", "Wilsone & Duffus",
+  #   "A.C. Morrison & Richards LLP", "Stewart & Watson", "Peterkins",
+  #   "Laurie & Co", "Adam Flowerdew & Reynolds", "Masson & Glennie LLP",
+  #   "Shiells", "Smith Solicitors Stonehaven", "Balfour + Manson",
+  #   "T. Duncan & Co.", "Gavin Bain & Co.", "Stronachs LLP",
+  #   "Brown & McRae", "Church Of Scotland", "Thorntons",
+  #   "Grant Smith Law Practice", "Murdoch, Mcmath & Mitchell", "Walter Gerrard & Co",
+  #   "Gilson Gray LLP", "Howie & Co", "Burnett Legal Services Ltd.",
+  #   "Macrae Stephen & Co", "Blackadders", "Hamilton Watt & Co",
+  #   "Taggart, Meil, Mathers", "Beckley Kenny & Co", "John Davie & Co",
+  #   "Alex Hutcheon & Company Ltd"
+  # )
   
   # --- UI Rendering ---
   
@@ -140,7 +140,7 @@ shinyServer(function(input, output, session) {
       selectInput("tax", "Tax Band:", choices = LETTERS[1:7], selected = form_data$tax),
       selectInput("has_garden", "Has Garden:", choices = c("Yes", "No"), selected = form_data$has_garden),
       selectInput("num_floors", "Number of floors:", choices = c("1", "2"), selected = form_data$num_floors),
-      selectInput("solicitor", "Solicitor Account Name:", choices = solicitor_choices, selected = form_data$solicitor),
+      #selectInput("solicitor", "Solicitor Account Name:", choices = solicitor_choices, selected = form_data$solicitor),
       dateInput("date_selected", "Select Date:", value = form_data$date_selected, min = "2024-09-27", max = Sys.Date()),
       bsTooltip("type", "The type of property", 
                 placement = "right", trigger = "hover"),
@@ -201,8 +201,8 @@ shinyServer(function(input, output, session) {
       num_floors = form_data$num_floors,
       epc_band = as.factor(form_data$epc),
       council_tax_band = as.factor(form_data$tax),
-      days_since = days_since,
-      SolicitorAccount_Name = as.factor(form_data$solicitor)
+      days_since = days_since#,
+      #SolicitorAccount_Name = as.factor(form_data$solicitor)
     )
     
     predict(model_m1, new_data, se.fit = TRUE)
